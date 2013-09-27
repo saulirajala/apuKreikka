@@ -1,24 +1,21 @@
-/* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 window.onload = function() {
     //luodaan screen-luokan olio
     var naytto = new Screen("Roomalaiskirje");
+    
     //document.write(naytto.kirje);
     naytto.tulostaMain();
 }
+var sana = new Sana("", "n-nsm", "#ffffff");
 
-
-/**
- * Screen olio, joka huolehtii ohjelman tulostamisen
+/** Screen olio, joka huolehtii ohjelman tulostamisen
+ * 
  * Huolehtii lomakkeen ja muun näkyvän tulostamisesta sekä isännöi globaaleja 
  * metodeja. Olion vastuulla kaikki tulostettava ja käyttäjän syöte.
  *
  * Attribuutit:
- * -kirje???
+ * -kirjeen nimi???
  * Metodit:
- * tulostaLomake()
+ * tulostaMain() => done, muuten mutta nyt pitäis saada sana-oliolta apua
  * tulostaLyhenteet()
  * tulostaMenu()???
  * tarkista(input, olio.getSijamuoto())
@@ -30,16 +27,12 @@ function Screen(kirje)
     // Sijoitetaan parametreina tulevat tiedot olion omiin muuttujiin:
     this.kirje = kirje;
 
-
-
-    // Liitetään metodi olioon:
+    // Liitetään metodit olioon:
     this.tulostaMain = tulostaMain;
-
-
-
 
     /*
      * funktion tehtävänä on tulostaa käyttöliittymän pääikkuna
+     * TODO: sana-oliolta apua
      */
     function tulostaMain()
     {
@@ -75,7 +68,7 @@ function Screen(kirje)
             smInput.size = "10";
             smInput.title = "";
             span.appendChild(smInput);
-            
+
             var img = document.createElement("img");
             img.id = "kuvake";
             img.src = "http://griponclimate.files.wordpress.com/2013/03/wrong.png";
@@ -83,9 +76,10 @@ function Screen(kirje)
             img.title = "";
             img.className = "visible";
             span.appendChild(img);
-            
+
             var label = document.createElement("label"); //kreikan sana
-            label.appendChild(document.createTextNode("Paulos"));
+            label.appendChild(document.createTextNode(sana.getGreekWord()));
+            //label.appendChild(document.createTextNode("paulos"));
             label.setAttribute("class", "solu-greekWord-label");
             divSolu.appendChild(label);
 
@@ -99,8 +93,41 @@ function Screen(kirje)
             suomInput.title = "";
             divSolu.appendChild(suomInput);
         }
-
-
-
     }
-} 
+}
+
+/* Sana-olio, joka Huolehtii apuKreikan toiminnallisuuden ytimestä. Eli tarjoaa 
+ * yhden kreikan sanan, sen sijamuodon ja värin.
+ * 
+ * Attribuutit:
+ * var greekWord
+ * var sijamuoto
+ * var color //kertoo taustavärin. default white, mutta esim. red, syanidi, jne.
+ *  
+ * Metodit:
+ * setColor()
+ * getGreekWord()
+ * getSijamuoto()
+ * 
+ * @param {type} kirje
+ * @returns {Screen}
+ */
+function Sana(greekWord, sijamuoto, color)
+{
+    // Sijoitetaan parametreina tulevat tiedot olion omiin muuttujiin:
+    this.greekWord = greekWord;
+    this.sijamuoto = sijamuoto;
+    this.color = color;
+
+    // Liitetään metodit olioon:
+    this.getGreekWord = getGreekWord;
+
+    /*
+     * funktion tehtävänä palauttaa olion kreikkalainen "nimi"
+     * 
+     */
+    function getGreekWord()
+    {
+       return "Παῦλος";
+    }
+}
