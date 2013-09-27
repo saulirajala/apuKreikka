@@ -1,0 +1,47 @@
+Oliot: ikkuna, sana, menu
+
+screen-olio
+-----------
+Huolehtii lomakkeen ja muun näkyvän tulostamisesta sekä isännöi globaaleja 
+metodeja. Olion vastuulla kaikki tulostettava ja käyttäjän syöte.
+
+Attribuutit:
+-???
+Metodit:
+tulostaLomake()
+tulostaLyhenteet()
+tulostaMenu()???
+tarkista(input, olio.getSijamuoto())
+merkkaa(input color, olio.setColor())
+===================================
+
+sana-olio
+-----------------
+Huolehtii apuKreikan toiminnallisuuden ytimestä. Eli tarjoaa yhden kreikan sanan,
+sen sijamuodon ja värin.
+
+Attribuutit:
+var greekWord
+var sijamuoto
+var color //kertoo taustavärin. default white, mutta esim. red, syanidi, jne.
+
+Metodit:
+setColor()
+getGreekWord()
+getSijamuoto()
+===================================
+
+save-olio
+-----------
+Huolehtii sivun eli yhden luvun tallentamisesta ja lataamisesta.
+
+Attribuutit:
+????
+
+Metodit:
+save()
+load()
+
+
+
+
