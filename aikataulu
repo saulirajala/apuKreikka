@@ -1,0 +1,15 @@
+Alustaa aikataulusta:
+
+1. vaihe: toteutetaan sovelluksen toiminnallisuus koskien staattisilla muuttujilla
+          esim. Room. 1:1
+-Sivusto toteutetaan pääasiassa javascriptillä. En tiedä onnistuuko javascript ja
+tietokanta yhteys vai pitääkö tietokannassa siirtyä PHP:hen. Mikäli tarvitsee, 
+onnistuu se ajax-pyynnöillä. Tehdäänkö kuitenkin lomakkeetkin javascriptillä?
+
+    1.1 toteutetaan vain tulostus ja tarkistus. Eli toiminnallisuus vastaavanlaiseksi
+        kuin versiossa 1.0 on.
+    
+    1.2 Lisätään toiminnallisuutta: tallennus, lataus, merkkaus
+
+2. vaihe: liitytään tietokantaan. Tietokannan suunnittelu, tekeminen ja 
+          liittäminen
