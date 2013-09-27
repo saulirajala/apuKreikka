@@ -31,3 +31,7 @@ body{
 .visible {
     height: 10px;
 }
+
+.hidden {
+    display: none;
+}
