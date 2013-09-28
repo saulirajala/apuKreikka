@@ -1,51 +1,67 @@
-var greekWords = new Array("Παῦλος", "δοῦλος", "Χριστοῦ", "Ἰησοῦ,", "κλητὸς", "ἀπόστολος,", "ἀφωρισμένος", "εἰς", "εὐαγγέλιον", "θεοῦ,");
+var img, smInput;
+var greekWords = new Array();
+greekWords[0] = new Array("Kuinka monta jaetta"); //pitäisi sisällään tarvittavaa meta-tietoa: jakeiden määrä, yms.
+greekWords[1] = new Array("Παῦλος", "δοῦλος", "Χριστοῦ", "Ἰησοῦ,", "κλητὸς", "ἀπόστολος,", "ἀφωρισμένος", "εἰς", "εὐαγγέλιον", "θεοῦ,");
+greekWords[2] = new Array("2ὃ ", "προεπηγγείλατο ", "διὰ ", "τῶν ", "προφητῶν ", "αὐτοῦ ", "ἐν ", "γραφαῖς ", "ἁγίαις,");
+greekWords[3] = new Array("3περὶ ", "τοῦ ", "υἱοῦ ", "αὐτοῦ ", "τοῦ ", "γενομένου ", "ἐκ ", "σπέρματος ", "Δαυὶδ ", "κατὰ ", "σάρκα,");
 var sijamuodot = new Array("N-NSM", "N-NSM", "N-GSM", "N-GSM", "A-NSM", "N-NSM", "V-RPP-NSM", "PREP", "N-ASN", "N-GSM");
 
+//greekWords[jaeNro][sanat]
+
 var sanat = new Array(); //luodaan taulukko, joka koostuu Sana-olioista
-for (var i = 0; i < 10; i++)
+for (var jae = 1; jae < 4; jae++)
 {
-    sanat[i] = new Sana(greekWords[i], sijamuodot[i], "#ffffff");
+    sanat[jae] = new Array();
+    for (var i = 0; i<greekWords[jae].length; i++){
+        sanat[jae][i] = new Sana(greekWords[jae][i], sijamuodot[i], "#ffffff");
+        
+    }
 }
+
 window.onload = function() {
     //luodaan screen-luokan olio
     var naytto = new Screen("Roomalaiskirje");
     naytto.tulostaMain();
-    for (var i=0; i<10; i++){
-        lisaaKuuntelija(document.getElementById("sijamuoto1-"+i), tarkista); //TODO: moninkertaistaa koskemaan kaikkia
-    }
+    var tapahtuma = new Tapahtuma(smInput); //smInputJaeNro-sanaNro
     
-
 }
-
-/**
- * Funktio lisää tapahtuman kuuntelijan parametrina annettuun elementtiin
- * @param {type} nappula Mitä elementtiä kuunnellaan?
- * @param {type} toiminto Mitä tehdään, kun toiminto tapahtuu?
- */
-function lisaaKuuntelija(nappula, toiminto) {
-    if (nappula.addEventListener) {
-        nappula.addEventListener('change', toiminto, false);
-    } else if (nappula.attachEvent) {
-        nappula.attachEvent('onchange', toiminto);
-    }
-}
-
-/* Tarkistaa onko input olion sijamuoto
- * jos on => vaihtaa kuvan class=visible ja src=oikein.jpg
- * jos ei => vaihtaa kuvan class=visible
+/* Tapahtuma-olio, joka tarkkailee parametrina tuodussa elementissä 
+ * tapahtuvia muutoksia.
  * 
- * @returns {undefined}
+ * @param {type} elementti Mitä tarkkaillaan?
+ * @returns {Tapahtuma}
  */
-function tarkista() {
-    var id = this.getAttribute("id");
-    id = id.slice(9).toString();  //id=1-0
-    var taulukko = id.split("-"); // {1, 0}
-    if (this.value.toUpperCase() === sanat[taulukko[1]].getSijamuoto()) {
-        document.getElementById("kuvake" + id).className = "visible";
-        document.getElementById("kuvake" + id).src = "http://www.lookseeedit.com/resources/tick.jpg";
-    } else {
-        document.getElementById("kuvake" + id).className = "visible";
-        document.getElementById("kuvake" + id).src = "http://griponclimate.files.wordpress.com/2013/03/wrong.png";
+function Tapahtuma(elementti)
+{
+    // Sijoitetaan parametreina tulevat tiedot olion omiin muuttujiin:
+    this.elementti = elementti; //smInput
+    
+    // Liitetään metodit olioon:
+    this.tarkista = tarkista;
+
+    if (elementti.addEventListener) {
+        elementti.addEventListener('change', tarkista, false);
+    } else if (elementti.attachEvent) {
+        elementti.attachEvent('onchange', tarkista);
+    }
+
+    /* Tarkistaa onko input olion sijamuoto
+     * jos on => vaihtaa kuvan class=visible ja src=oikein.jpg
+     * jos ei => vaihtaa kuvan class=visible
+     * 
+     * @returns {undefined}
+     */
+    function tarkista() {
+        var id = this.getAttribute("id");
+        id = id.slice(9).toString();  //id=1-0
+        var taulukko = id.split("-"); // {1, 0}
+        if (this.value.toUpperCase() === sanat[taulukko[0]][taulukko[1]].getSijamuoto()) {
+            document.getElementById("kuvake" + id).className = "visible";
+            document.getElementById("kuvake" + id).src = "http://www.lookseeedit.com/resources/tick.jpg";
+        } else {
+            document.getElementById("kuvake" + id).className = "visible";
+            document.getElementById("kuvake" + id).src = "http://griponclimate.files.wordpress.com/2013/03/wrong.png";
+        }
     }
 }
 
@@ -64,6 +80,7 @@ function tarkista() {
  * tulostaMenu()???
  * tarkista(input, olio.getSijamuoto())
  * merkkaa(input color, olio.setColor())
+ * @param {kirje} name description
  * @returns {Screen}
  */
 function Screen(kirje)
@@ -71,7 +88,7 @@ function Screen(kirje)
     // Sijoitetaan parametreina tulevat tiedot olion omiin muuttujiin:
     this.kirje = kirje;
     var tabIndeksi = 1;
-    
+
     // Liitetään metodit olioon:
     this.tulostaMain = tulostaMain;
 
@@ -93,7 +110,7 @@ function Screen(kirje)
      */
     function tulostaJae(jaeNro, sanojaJakeessa)
     {
-        var apu = 1*sanojaJakeessa+1;
+        var apu = 1 * sanojaJakeessa + 1;
         var divJae = document.createElement("div"); //jae-raja
         divJae.setAttribute("class", "jae");
         document.body.appendChild(divJae);
@@ -104,7 +121,7 @@ function Screen(kirje)
 
         for (var i = 0; i < sanojaJakeessa; i++)
         {
-            
+
             var divSolu = document.createElement("div");
             divSolu.setAttribute("class", "solu");
             divJae.appendChild(divSolu);
@@ -112,7 +129,7 @@ function Screen(kirje)
             var span = document.createElement("span");
             span.className = "solu-sijamuoto-span";
             divSolu.appendChild(span);
-            var smInput = document.createElement("input"); //sm-input
+            smInput = document.createElement("input"); //sm-input
             smInput.className = "solu-sijamuoto-input";
             smInput.value = "";
             smInput.id = "sijamuoto" + jaeNro + "-" + i;          //ID
@@ -127,13 +144,13 @@ function Screen(kirje)
             var img = document.createElement("img");
             img.id = "kuvake" + jaeNro + "-" + i;                 //ID
             img.src = "http://griponclimate.files.wordpress.com/2013/03/wrong.png";
-            img.alt = "väärä";
-            img.title = "";
+            img.alt = sanat[jaeNro][i].getSijamuoto();
+            img.title = sanat[jaeNro][i].getSijamuoto();
             img.className = "hidden";
             span.appendChild(img);
 
             var label = document.createElement("label"); //kreikan sana
-            label.appendChild(document.createTextNode(sanat[i].getGreekWord()));
+            label.appendChild(document.createTextNode(sanat[jaeNro][i].getGreekWord()));
             //label.appendChild(document.createTextNode("paulos"));
             label.setAttribute("class", "solu-greekWord-label");
             divSolu.appendChild(label);
