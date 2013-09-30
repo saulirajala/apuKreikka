@@ -20,11 +20,6 @@ for (var j = 1; j < greekWords.length; j++) {
 var tapahtuma = new Tapahtuma();
 var tabIndex = 1;
 var s_tabIndex = 0;
-/* TODO: tehdä tulostus täysin olioilla
- * 2. vaihe: for-silmukkaan
- * 
- * 
- */
 
 /* kaikki näkyvä tulostus täytyy tapahtua vasta ikkunan ladattua eli tässä
  * window.onload funktiossa, koska muuten ei voida liittää bodyyn, mitään, koska
@@ -43,6 +38,7 @@ window.onload = function() {
         tabIndex = tabIndex+s_tabIndex;
     }
 }
+
 /* Tapahtuma-olio, joka tarkkailee parametrina tuodussa elementissä 
  * tapahtuvia muutoksia.
  * 
@@ -117,8 +113,6 @@ function Screen(kirje)
     // Liitetään metodit olioon:
     this.tulostaJae = tulostaJae;
 
-
-
     /*
      * Tulostaa yhden jakeen annetuilla parametreillä
      * @param olioTaulukko {Objects Array} 
@@ -141,6 +135,7 @@ function Screen(kirje)
         }
     }
 }
+
 /*
  * 
  * @param {type} divJae
