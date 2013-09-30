@@ -3,15 +3,84 @@
     margin-top: 1em;
     margin-left: 1em;
 }
+.divMain {
+    background: white;
+    width: 80%;
+    padding-bottom: 20%;
+}
 
+.sivupalkki_oikea {
+    background: #f0f0f0;
+    padding: 0;
+    margin: 0;
+    border-left: 2px solid black;
+    border-bottom: 2px solid black;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 350px;
+    position: fixed;
+    z-index: 20000;
+    font-size: 14px;
+    color: #000000;
+    overflow: hidden;
+}
+/*
+.sivupalkki_oikea:hover {
+    background: #f0f0f0;
+    padding: 0;
+    margin: 0;
+    border-left: 2px solid black;
+    border-bottom: 2px solid black;
+    position: absolute;
+    top: 0;
+    right: 0px;
+    width: 350px;
+    height: 700px;
+    float: right;
+    z-index: 20000;
+    font-size: 14px;
+    color: #000000;
+}*/
+
+.sivupalkki_oikea ul {
+    padding: 0;
+    margin: 0;    
+    margin-left: 10px;
+    margin-top: 5px;
+    list-style: none;
+    text-align: center;
+}
+
+.sivupalkki_oikea dl {
+    float: left;
+}
+.sivupalkki_oikea dd {
+    padding-left: 15px;
+    margin-left: 0px;
+}
+
+.sivupalkki_oikea li {
+    font-size: 15px;
+    font-style: italic;
+    text-align: center;
+}
+
+.sivupalkki_oikea h1 {
+    font-size: 24px;
+    text-align: center;
+}
+
+
+.solu-sijamuoto-span {
+    display: block;
+}
 .solu {
     float: left;
     margin-right: 1em;
 }
 
-.solu-sijamuoto-span {
-    display: block;
-}
+
 
 .solu-sijamuoto-input {
     margin-top: 20px;
@@ -34,4 +103,27 @@ body{
 
 .hidden {
     display: none;
+}
+.divNavi{
+    background: silver;
+    width: 600px;
+    height: 100px;
+    position: fixed;
+    bottom: 0;  
+}
+
+.divNaviDockLeft{
+    float: left;
+    margin: 0;
+    padding: 0;
+}
+
+.divNaviDockRight{
+    float: right;
+    margin-right: 50px;
+}
+
+.divSelect{
+    padding-top: 30px;
+    text-align: center;
 }

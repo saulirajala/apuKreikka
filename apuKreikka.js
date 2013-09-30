@@ -38,6 +38,8 @@ window.onload = function() {
         naytto.tulostaJae(jaeNro);
         tabIndex = tabIndex + s_tabIndex;
     }
+    naytto.tulostaLyhenteet();
+    naytto.tulostaNavi();
 }
 
 /* Tapahtuma-olio, joka omistaa asetaKuuntelija()-metodin.
@@ -92,7 +94,7 @@ function Tapahtuma()
  *
  * Metodit:
  * tulostaMain() => done
- * tulostaLyhenteet() => TODO
+ * tulostaLyhenteet() => done
  * tulostaMenu() => TODO
  * merkkaa(input color, olio.setColor()) => TODO: omaan olioon???
  * @param {kirje} mista Raamatun kirjasta on kyse
@@ -102,10 +104,15 @@ function Screen(kirje)
 {
     this.kirje = kirje;
     this.tulostaJae = tulostaJae;
+    this.tulostaLyhenteet = tulostaLyhenteet;
+    this.tulostaNavi = tulostaNavi;
 
+    var divMain = document.createElement("div");
+    divMain.className = "divMain";
+    document.body.appendChild(divMain);
     var h1 = document.createElement("h1");
     h1.appendChild(document.createTextNode(kirje));
-    document.body.appendChild(h1);
+    divMain.appendChild(h1);
 
     /*
      * Tulostaa halutun jakeen. Käyttää apurina ScreenSolu-oliota.
@@ -117,7 +124,7 @@ function Screen(kirje)
     {
         var divJae = document.createElement("div");
         divJae.setAttribute("class", "jae");
-        document.body.appendChild(divJae);
+        divMain.appendChild(divJae);
 
         var h2Jae = document.createElement("h2");
         divJae.appendChild(h2Jae);
@@ -127,7 +134,167 @@ function Screen(kirje)
             nayttoSolu.tulostaSolu(divJae, jaeNro, i);
         }
     }
+
+    function tulostaLyhenteet()
+    {
+        var divSivuPalkki = document.createElement("div");
+        divSivuPalkki.className = "sivupalkki_oikea";
+        document.body.appendChild(divSivuPalkki);
+
+        var h1 = document.createElement("h1");
+        h1.appendChild(document.createTextNode("Sijamuodon syntaksi"));
+        divSivuPalkki.appendChild(h1);
+
+        var ul = document.createElement("ul");
+        var taulukko = new Array("SL(-TenseVoiceMood)", "(-caseNumberGender)", "(-personNumber)");
+        for (var i = 0; i < taulukko.length; i++)
+        {
+            var li = document.createElement("li");
+            li.appendChild(document.createTextNode(taulukko[i]));
+            ul.appendChild(li);
+        }
+        divSivuPalkki.appendChild(ul);
+
+
+        var lyhenteet = new Array();
+        lyhenteet[0] = new Array("1. Sanaluokka=SL", "N: Substantiivi", "V: Verbi", "ADJ: Adjektiivi", "ADV: Adverbi", "CONJ: Konjuktio", "COND: Konditionaali", "PRT: Partikkeli", "PREP: Prepositio");
+        lyhenteet[1] = new Array("2. Tense", "P: Preesens", "I: Imprerfekti", "F: Futuuri", "2F: 2. futuuri", "A: Aoristi", "2A: 2. aoristi", "R: Perfekti", "2R: 2. perfekti", "L: Pluskvamperfekti", "2. L: 2. pluskvamperfekti");
+        lyhenteet[2] = new Array("3. Voice", "A: Aktiivi", "M: Mediumi", "P: Passiivi", "D: Mediumi deponentti", "O: Passiivi deponentti", "N: Med. tai pas. deponentti");
+        lyhenteet[3] = new Array("4. Mood", "I: Indikatiivi", "S: Konjuktiivi", "O: Optatiivi", "M: Imperatiivi", "N: Infinitiivi", "P: Partisiippi", "R: Välttämätön partisiippi");
+        lyhenteet[4] = new Array("5. Case", "N: Nominatiivi", "V: Vokatiivi", "G: Genetiivi", "D: Datiivi", "A: Akkusatiivi");
+        lyhenteet[5] = new Array("6. Number", "S: Yksikkö", "P: Monikko");
+        lyhenteet[6] = new Array("7. Gender", "M: Maskuliini", "F: Feminiini", "N: Neutri");
+        lyhenteet[7] = new Array("8. Person", "1: 1. persoona", "2: 2. persoona", "3: 3. persoona");
+
+        for (var j = 0; j < lyhenteet.length; j++) {
+            var dl = document.createElement("dl");
+            divSivuPalkki.appendChild(dl);
+            for (var i = 0; i < lyhenteet[j].length; i++) {
+                if (i == 0) {
+                    var dt = document.createElement("dt");
+                    dt.appendChild(document.createTextNode(lyhenteet[j][i]));
+                    dl.appendChild(dt);
+                    continue;
+                }
+                var dd = document.createElement("dd");
+                dd.appendChild(document.createTextNode(lyhenteet[j][i]));
+                dl.appendChild(dd);
+                //divSivuPalkki.appendChild();
+            }
+        }
+    }
+    /*
+     * Funktio tulostaa navigointivalikon 
+     *
+     */
+    function tulostaNavi()
+    {
+        var divNavi = document.createElement("div");
+        divNavi.className = "divNavi";
+        divNavi.id = "divNavi";
+        document.body.appendChild(divNavi);
+
+        var divNaviDockLeft = document.createElement("div");
+        divNaviDockLeft.className = "divNaviDockLeft";
+        divNaviDockLeft.id = "divNaviDockLeft";
+        divNavi.appendChild(divNaviDockLeft);
+        var dock = new MacStyleDock(
+                document.getElementById("divNaviDockLeft"),
+                [
+                    {
+                        name: "kuvakkeet/info",
+                        extension: ".png",
+                        sizes: [48, 48],
+                        onclick: function() {
+                            alert("apuKreikka on alkukielisen Ut:n kääntämiseen tarkoitettu työväline. \nOhjelma automaattisesti tarkistaa oletko analysoinut sanan sijamuodon oikein.\n\nKreikan teksti: greekbible.com, http://www.greekbible.com. \nSijamuodot: biblos.com, http://www.interlinearbible.org \n\n\n2013\napuKreikka 2.0 (c) Sauli J. Rajala. ");
+                        }
+                    },
+                    {
+                        name: "kuvakkeet/tallenna",
+                        extension: ".png",
+                        sizes: [48, 48],
+                        onclick: function() {
+                            if ($("tulostus").getAttribute("class") != "hidden")
+                                avaaIframe("tulostus");
+                            else
+                                tallenna();
+                        }
+                    },
+                    {
+                        name: "kuvakkeet/kansio",
+                        extension: ".png",
+                        sizes: [48, 48],
+                        onclick: function() {
+                            avaaIframe("iframe");
+                        }
+                    }
+                ], 38, 48, 2);
+
+        var divNaviDockRight = document.createElement("div");
+        divNaviDockRight.className = "divNaviDockRight";
+        divNaviDockRight.id = "divNaviDockRight";
+        divNavi.appendChild(divNaviDockRight);
+        var dock2 = new MacStyleDock(
+                document.getElementById("divNaviDockRight"),
+                [
+                    {
+                        name: "kuvakkeet/vasen2",
+                        extension: ".png",
+                        sizes: [48, 48],
+                        onclick: function() {
+
+                        }
+                    },
+                    {
+                        name: "kuvakkeet/oikea2",
+                        extension: ".png",
+                        sizes: [48, 48],
+                        onclick: function() {
+                            alert("You clicked on right icon");
+                        }
+                    }
+
+                ],
+                32,
+                48,
+                2);
+        var divSelect = document.createElement("div");
+        divSelect.className = "divSelect";
+        divNavi.appendChild(divSelect);
+        var selectBook = document.createElement("select");
+        selectBook.id = "kirja";
+        selectBook.name = "kirja";
+        divSelect.appendChild(selectBook);
+        var optgroup = document.createElement("optgroup");
+        optgroup.label = "Valitse Ut:n kirja";
+        selectBook.appendChild(optgroup);
+        var booksArray = new Array("Matt.", "Mark.", "Luuk.", "Joh.", "Apt.", "Room.", "1. Kor.", "2. Kor.", "Gal.", "Efe.", "Fil.", "Kol.", "1. Tess.", "2. Tess.", "1. Tim.", "2. Tim.", "Titus", "Filemon", "Hepr.", "Jaakob", "1. Piet.", "2. Piet.", "1. Joh.", "2. Joh.", "3. Joh.", "Juudas", "Ilm.");
+
+        for (var i = 0; i < booksArray.length; i++)
+        {
+            var option = document.createElement("option");
+            option.value = booksArray[i];
+            option.appendChild(document.createTextNode(booksArray[i]));
+            selectBook.appendChild(option);
+        }
+
+        var selectLuku = document.createElement("select");
+        selectLuku.id = "Luku";
+        selectLuku.name = "Luku";
+        divSelect.appendChild(selectLuku);
+        var lukuArray = new Array("1. luku", "2. luku", "3. luku");
+
+        for (var i = 0; i < lukuArray.length; i++)
+        {
+            var option = document.createElement("option");
+            option.value = lukuArray[i];
+            option.appendChild(document.createTextNode(lukuArray[i]));
+            selectLuku.appendChild(option);
+        }
+    }
+
 }
+
 
 /* Huolehtii yhden solun(sijamuoto-input, img, label ja suom.input) 
  * tulostamisesta. 
@@ -229,7 +396,7 @@ function Sana(greekWord, sijamuoto, color, paikka)
     {
         return this.greekWord;
     }
-    
+
     /*
      * Funktion tehtävänä palauttaa olion sijamuoto 
      * @returns {string} sijamuoto - palauttaa sanan sijamuodon
@@ -238,7 +405,7 @@ function Sana(greekWord, sijamuoto, color, paikka)
     {
         return this.sijamuoto;
     }
-    
+
     /*
      * Funktion tehtävänä palauttaa olion kreikkalainen "nimi"
      * @returns {string} paikka - palauttaa sanan paikan (jae-paikkaSanassa)
@@ -247,7 +414,7 @@ function Sana(greekWord, sijamuoto, color, paikka)
     {
         return this.paikka;
     }
-    
+
     /*
      * Funktion tehtävänä palauttaa sanan taustaväri.
      * @returns {string} color - palauttaa sanan taustavärin.
@@ -256,7 +423,7 @@ function Sana(greekWord, sijamuoto, color, paikka)
     {
         return this.color;
     }
-    
+
     /*
      * Funktion tehtävänä on asettaa parametrina tuleva uusi väri taustaväriksi. 
      * @param {type} newColor - uusi taustaväri

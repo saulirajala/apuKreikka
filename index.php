@@ -3,8 +3,9 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fi" >
     <head>
-        <link href="apuKreikka.css" rel="StyleSheet" type="text/css" />
+        <link rel="stylesheet" type="text/css" href="apuKreikka.css" />
         <script language="JavaScript" src="apuKreikka.js" type="text/javascript"></script>
+        <script type="text/javascript" src="MacStyleDock.js"></script>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
             <title>apuKreikka 2.0</title>
     </head>

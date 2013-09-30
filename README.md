@@ -12,6 +12,10 @@ Puuttuva toiminnallisuus:
 - pitää pystyä maalaamaan sanoja (esim. perusmuotoiset verbit punaisella, 
     partisiipit vaaleansinisellä, jne.)
 - pitää pystyä tallentamaan ja lukemaan käyttäjän koneelle/-lta
+- pitää tulostaa lyhenteet ja navi-palkin. Paremmassa versiossa lyhenteet voisivat
+    tulla näkyviin, kun hiiren vie oikeaan laitaan. Näin >90% sivun tilasta
+    saataisiin varsinaiselle tekstille. Voisi myös pysyä tämä sivupalkki, mukana
+    vaikka scrollaa alaspäin. (Tämä ilmeisesti css-kikkailua)
 
 apuKreikka 2.0 olioilla.
 websovellus, joka auttaa kääntämään Ut:n kreikkaa.
