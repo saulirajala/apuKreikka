@@ -1,29 +1,36 @@
-Oliot: ikkuna, sana, menu
-
-screen-olio
+Screen-olio
 -----------
-Huolehtii lomakkeen ja muun näkyvän tulostamisesta sekä isännöi globaaleja 
-metodeja. Olion vastuulla kaikki tulostettava ja käyttäjän syöte.
+Huolehtii lomakkeen ja muun näkyvän tulostamisesta. 
+Olion vastuulla kaikki tulostettava ja käyttäjän syöte.
 
 Attribuutit:
--???
+-kirje //kirjeen nimi (esim. Roomalaiskirje)
 Metodit:
-tulostaLomake()
-tulostaLyhenteet()
-tulostaMenu()???
-tarkista(input, olio.getSijamuoto())
-merkkaa(input color, olio.setColor())
+tulostaJae() //tulostaa ScreenSolu-olion avulla kunkin jakeen
+tulostaLyhenteet() =>TODO
+tulostaMenu()??? => TODO
 ===================================
 
-sana-olio
+ScreenSolu-olio
+-----------
+Huolehtii yhden solun (sijamuoto-input, kuva, label ja suom.input) tulostuksen.
+Lisäksi kutsuu Tapahtuma-olion metodia, jolla asetetaan kuuntelija inputtiin.
+
+Metodit:
+tulostaSolu(divJae, jaeNro, sananPaikka) //tulostaa yhden solun div-lohkon sisälle
+===================================
+
+
+Sana-olio
 -----------------
 Huolehtii apuKreikan toiminnallisuuden ytimestä. Eli tarjoaa yhden kreikan sanan,
-sen sijamuodon ja värin.
+sen sijamuodon, värin ja sijainnin tekstissä (jae-sananPaikka).
 
 Attribuutit:
 var greekWord
 var sijamuoto
 var color //kertoo taustavärin. default white, mutta esim. red, syanidi, jne.
+var paikka //kertoo sanan sijainnin lauseessa (jae-sananPaikka)
 
 Metodit:
 setColor()
@@ -31,7 +38,19 @@ getGreekWord()
 getSijamuoto()
 ===================================
 
-save-olio
+Tapahtuma-olio
+-----------------
+Huolehtii kuuntelijan laittamisesta kuhunkin sijamuoto-inputtiin. Olio luodaan
+ohjelman käynnistyessä, mutta vasta ScreenSolu-olio kutsuu metodia
+kutsuu 
+
+Metodit:
+asetaKuuntelija(elementti) //asettaa kuuntelijan elementtiin
+tarkista() //tarkistaa onko käyttäjän syöttämä sijamuoto oikein
+===================================
+
+
+save-olio???
 -----------
 Huolehtii sivun eli yhden luvun tallentamisesta ja lataamisesta.
 
@@ -42,6 +61,7 @@ Metodit:
 save()
 load()
 
+Merkkaa-olio????
 
 
 

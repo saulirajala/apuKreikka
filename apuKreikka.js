@@ -1,4 +1,3 @@
-var img, smInput;
 var greekWords = new Array();
 greekWords[0] = new Array("Kuinka monta jaetta"); //pitäisi sisällään tarvittavaa meta-tietoa: jakeiden määrä, yms.
 greekWords[1] = new Array("Παῦλος", "δοῦλος", "Χριστοῦ", "Ἰησοῦ,", "κλητὸς", "ἀπόστολος,", "ἀφωρισμένος", "εἰς", "εὐαγγέλιον", "θεοῦ,");
@@ -17,9 +16,11 @@ for (var j = 1; j < greekWords.length; j++) {
         sanaOliot[j][i] = new Sana(greekWords[j][i], sijamuodot[j][i], "#ffffff", j + "-" + i);
     }
 }
+var nayttoSolu = new ScreenSolu();
 var tapahtuma = new Tapahtuma();
 var tabIndex = 1;
 var s_tabIndex = 0;
+
 
 /* kaikki näkyvä tulostus täytyy tapahtua vasta ikkunan ladattua eli tässä
  * window.onload funktiossa, koska muuten ei voida liittää bodyyn, mitään, koska
@@ -35,14 +36,12 @@ window.onload = function() {
     var naytto = new Screen("Roomalaiskirje");
     for (var jaeNro = 1; jaeNro < sanaOliot.length; jaeNro++) {
         naytto.tulostaJae(jaeNro);
-        tabIndex = tabIndex+s_tabIndex;
+        tabIndex = tabIndex + s_tabIndex;
     }
 }
 
-/* Tapahtuma-olio, joka tarkkailee parametrina tuodussa elementissä 
- * tapahtuvia muutoksia.
+/* Tapahtuma-olio, joka omistaa asetaKuuntelija()-metodin.
  * 
- * @param {type} elementti Mitä tarkkaillaan?
  * @returns {Tapahtuma}
  */
 function Tapahtuma()
@@ -91,37 +90,32 @@ function Tapahtuma()
  * TabIndeksin tulostuksessa ongelmia
  * 
  *
- * Attribuutit:
- * -kirjeen nimi???
  * Metodit:
  * tulostaMain() => done
- * tulostaLyhenteet()
- * tulostaMenu()???
- * tarkista(input, olio.getSijamuoto())
- * merkkaa(input color, olio.setColor())
+ * tulostaLyhenteet() => TODO
+ * tulostaMenu() => TODO
+ * merkkaa(input color, olio.setColor()) => TODO: omaan olioon???
  * @param {kirje} mista Raamatun kirjasta on kyse
  * @returns {Screen}
  */
 function Screen(kirje)
 {
-    // Sijoitetaan parametreina tulevat tiedot olion omiin muuttujiin:
     this.kirje = kirje;
+    this.tulostaJae = tulostaJae;
+
     var h1 = document.createElement("h1");
     h1.appendChild(document.createTextNode(kirje));
     document.body.appendChild(h1);
 
-    // Liitetään metodit olioon:
-    this.tulostaJae = tulostaJae;
-
     /*
-     * Tulostaa yhden jakeen annetuilla parametreillä
-     * @param olioTaulukko {Objects Array} 
+     * Tulostaa halutun jakeen. Käyttää apurina ScreenSolu-oliota.
+     * @param jaeNro > Mikä jae pitää tulostaa?
      * 
      * @returns {undefined}
      */
-    function tulostaJae(jaeNro) //1-2
+    function tulostaJae(jaeNro)
     {
-        var divJae = document.createElement("div"); //jae-raja
+        var divJae = document.createElement("div");
         divJae.setAttribute("class", "jae");
         document.body.appendChild(divJae);
 
@@ -129,32 +123,37 @@ function Screen(kirje)
         divJae.appendChild(h2Jae);
         h2Jae.appendChild(document.createTextNode(jaeNro + ". jae:"));
 
-        var nayttoSolu = new ScreenSolu(jaeNro);
         for (var i = 0; i < sanaOliot[jaeNro].length; i++) {
-            nayttoSolu.tulostaSolu(divJae, i);
+            nayttoSolu.tulostaSolu(divJae, jaeNro, i);
         }
     }
 }
 
-/*
+/* Huolehtii yhden solun(sijamuoto-input, img, label ja suom.input) 
+ * tulostamisesta. 
  * 
- * @param {type} divJae
- * @param {type} jaeNro
- * @param {type} i
  * @returns {undefined}
  */
-function ScreenSolu(jaeNro)
+function ScreenSolu()
 {
-    this.jaeNro = jaeNro;
     this.tulostaSolu = tulostaSolu;
 
-    function tulostaSolu(divJae, sananPaikka)
+    /* Tulostaa solun
+     * 
+     * @param {type} divJae, Minkä div-lohkon lapseksi solu laitetaan
+     * @param {type} jaeNro, Mikä jae on kyseessä?
+     * @param {type} sananPaikka, Missä kohtaa jaetta sana/solu sijaitsee
+     * @returns {undefined}
+     */
+    function tulostaSolu(divJae, jaeNro, sananPaikka)
     {
+        var img, smInput;
         s_tabIndex = tabIndex + sanaOliot[jaeNro].length;
         var divSolu = document.createElement("div");
         divSolu.className = "solu";
         divJae.appendChild(divSolu);
 
+        //<span><input id=sijamuoto/><img /></span>
         var span = document.createElement("span");
         span.className = "solu-sijamuoto-span";
         divSolu.appendChild(span);
@@ -179,11 +178,13 @@ function ScreenSolu(jaeNro)
         img.className = "hidden";
         span.appendChild(img);
 
+        //<label>paulos</label>
         var label = document.createElement("label"); //kreikan sana
         label.appendChild(document.createTextNode(sanaOliot[jaeNro][sananPaikka].getGreekWord()));
         label.className = "solu-greekWord-label";
         divSolu.appendChild(label);
 
+        //<input id=suomennos/>
         var suomInput = document.createElement("input"); //suom-input          
         suomInput.id = "suomennos" + jaeNro + "-" + sananPaikka;
         suomInput.type = "text";
@@ -196,59 +197,73 @@ function ScreenSolu(jaeNro)
         divSolu.appendChild(suomInput);
         tabIndex++;
     }
-
 }
-/* Sana-olio, joka Huolehtii apuKreikan toiminnallisuuden ytimestä. Eli tarjoaa 
+
+/* Sana-olio, joka huolehtii apuKreikan toiminnallisuuden ytimestä. Eli tarjoaa 
  * yhden kreikan sanan, sen sijamuodon ja värin.
  * 
- * Attribuutit:
- * var greekWord
- * var sijamuoto
- * var color //kertoo taustavärin. default white, mutta esim. red, syanidi, jne.
- *  
- * Metodit:
- * setColor()
- * getGreekWord()
- * getSijamuoto()
+ * @param {type} greekWord - kreikankielinen sana
+ * @param {type} sijamuoto - sanan sijamuoto
+ * @param {type} color - sijamuodon mukaan vaihtuva väri, oletuksena #ffffff
+ * @param {type} paikka - sanan paikka tekstissä (jae-paikkaJakeessa)
  * 
- * @param {type} kirje
- * @returns {Screen}
+ * @returns {Sana}
  */
 function Sana(greekWord, sijamuoto, color, paikka)
 {
-    // Sijoitetaan parametreina tulevat tiedot olion omiin muuttujiin:
     this.greekWord = greekWord;
     this.sijamuoto = sijamuoto;
     this.color = color;
     this.paikka = paikka;
-
-    // Liitetään metodit olioon:
     this.getGreekWord = getGreekWord;
     this.getSijamuoto = getSijamuoto;
     this.getPaikka = getPaikka;
+    this.getColor = getColor;
+    this.setColor = setColor;
 
-    /*
-     * funktion tehtävänä palauttaa olion kreikkalainen "nimi"
-     * 
+    /* 
+     * Funktion tehtävänä palauttaa olion kreikkalainen "nimi"
+     * @returns {string} greekWord - palauttaa kreikankielisen sanan
      */
     function getGreekWord()
     {
         return this.greekWord;
     }
+    
     /*
-     * funktion tehtävänä palauttaa olion kreikkalainen "nimi"
-     * 
+     * Funktion tehtävänä palauttaa olion sijamuoto 
+     * @returns {string} sijamuoto - palauttaa sanan sijamuodon
      */
     function getSijamuoto()
     {
         return this.sijamuoto;
     }
+    
     /*
-     * funktion tehtävänä palauttaa olion kreikkalainen "nimi"
-     * 
+     * Funktion tehtävänä palauttaa olion kreikkalainen "nimi"
+     * @returns {string} paikka - palauttaa sanan paikan (jae-paikkaSanassa)
      */
     function getPaikka()
     {
         return this.paikka;
+    }
+    
+    /*
+     * Funktion tehtävänä palauttaa sanan taustaväri.
+     * @returns {string} color - palauttaa sanan taustavärin.
+     */
+    function getColor()
+    {
+        return this.color;
+    }
+    
+    /*
+     * Funktion tehtävänä on asettaa parametrina tuleva uusi väri taustaväriksi. 
+     * @param {type} newColor - uusi taustaväri
+     * @returns {Sana.setColor}
+     */
+    function setColor(newColor)
+    {
+        this.color = newColor;
     }
 }
