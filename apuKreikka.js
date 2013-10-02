@@ -34,12 +34,13 @@ var s_tabIndex = 0;
 window.onload = function() {
 
     var naytto = new Screen("Roomalaiskirje");
+    naytto.tulostaNavi();
     for (var jaeNro = 1; jaeNro < sanaOliot.length; jaeNro++) {
         naytto.tulostaJae(jaeNro);
         tabIndex = tabIndex + s_tabIndex;
     }
     naytto.tulostaLyhenteet();
-    naytto.tulostaNavi();
+    
 }
 
 /* Tapahtuma-olio, joka omistaa asetaKuuntelija()-metodin.
@@ -137,13 +138,17 @@ function Screen(kirje)
 
     function tulostaLyhenteet()
     {
-        var divSivuPalkki = document.createElement("div");
-        divSivuPalkki.className = "sivupalkki_oikea";
-        document.body.appendChild(divSivuPalkki);
+        var divAlaTausta = document.createElement("div");
+        divAlaTausta.className = "alaPalkkiTausta";
+        document.body.appendChild(divAlaTausta);
+        
+        var divAla = document.createElement("div");
+        divAla.className = "alaPalkki";
+        divAlaTausta.appendChild(divAla);
 
         var h1 = document.createElement("h1");
         h1.appendChild(document.createTextNode("Sijamuodon syntaksi"));
-        divSivuPalkki.appendChild(h1);
+        divAla.appendChild(h1);
 
         var ul = document.createElement("ul");
         var taulukko = new Array("SL(-TenseVoiceMood)", "(-caseNumberGender)", "(-personNumber)");
@@ -153,7 +158,7 @@ function Screen(kirje)
             li.appendChild(document.createTextNode(taulukko[i]));
             ul.appendChild(li);
         }
-        divSivuPalkki.appendChild(ul);
+        divAla.appendChild(ul);
 
 
         var lyhenteet = new Array();
@@ -168,7 +173,7 @@ function Screen(kirje)
 
         for (var j = 0; j < lyhenteet.length; j++) {
             var dl = document.createElement("dl");
-            divSivuPalkki.appendChild(dl);
+            divAla.appendChild(dl);
             for (var i = 0; i < lyhenteet[j].length; i++) {
                 if (i == 0) {
                     var dt = document.createElement("dt");
@@ -189,10 +194,14 @@ function Screen(kirje)
      */
     function tulostaNavi()
     {
+        var divNaviTausta = document.createElement("div");
+        divNaviTausta.className = "divNaviTausta";
+        divNaviTausta.id = "divNaviTausta";
+        document.body.appendChild(divNaviTausta);
         var divNavi = document.createElement("div");
         divNavi.className = "divNavi";
         divNavi.id = "divNavi";
-        document.body.appendChild(divNavi);
+        divNaviTausta.appendChild(divNavi);
 
         var divNaviDockLeft = document.createElement("div");
         divNaviDockLeft.className = "divNaviDockLeft";
@@ -206,7 +215,7 @@ function Screen(kirje)
                         extension: ".png",
                         sizes: [48, 48],
                         onclick: function() {
-                            alert("apuKreikka on alkukielisen Ut:n kääntämiseen tarkoitettu työväline. \nOhjelma automaattisesti tarkistaa oletko analysoinut sanan sijamuodon oikein.\n\nKreikan teksti: greekbible.com, http://www.greekbible.com. \nSijamuodot: biblos.com, http://www.interlinearbible.org \n\n\n2013\napuKreikka 2.0 (c) Sauli J. Rajala. ");
+                            alert("apuKreikka on alkukielisen Ut:n kääntämiseen tarkoitettu työväline. \nOhjelma automaattisesti tarkistaa oletko analysoinut sanan sijamuodon oikein.\n\nKreikan teksti: greekbible.com, http://www.greekbible.com. \nSijamuodot: biblestudytools.com/, http://www.biblestudytools.com/ \n\n\n2013\napuKreikka 2.0 (c) Sauli J. Rajala. ");
                         }
                     },
                     {
@@ -376,16 +385,16 @@ function ScreenSolu()
  * 
  * @returns {Sana}
  */
-function Sana(greekWord, sijamuoto, color, paikka)
+function Sana(grkWord, sm, color, sijainti)
 {
-    this.greekWord = greekWord;
-    this.sijamuoto = sijamuoto;
-    this.color = color;
-    this.paikka = paikka;
+    var greekWord = grkWord; //luo yksityisen muuttujan, joka saatavilla vain oliolle. TODO: muuta kaikki     
+    var sijamuoto = sm;
+    var bgColor = color;
+    var paikka = sijainti;
     this.getGreekWord = getGreekWord;
     this.getSijamuoto = getSijamuoto;
     this.getPaikka = getPaikka;
-    this.getColor = getColor;
+    this.getBgColor = getBgColor;
     this.setColor = setColor;
 
     /* 
@@ -394,7 +403,7 @@ function Sana(greekWord, sijamuoto, color, paikka)
      */
     function getGreekWord()
     {
-        return this.greekWord;
+        return greekWord;
     }
 
     /*
@@ -403,7 +412,7 @@ function Sana(greekWord, sijamuoto, color, paikka)
      */
     function getSijamuoto()
     {
-        return this.sijamuoto;
+        return sijamuoto;
     }
 
     /*
@@ -412,16 +421,16 @@ function Sana(greekWord, sijamuoto, color, paikka)
      */
     function getPaikka()
     {
-        return this.paikka;
+        return paikka;
     }
 
     /*
      * Funktion tehtävänä palauttaa sanan taustaväri.
      * @returns {string} color - palauttaa sanan taustavärin.
      */
-    function getColor()
+    function getBgColor()
     {
-        return this.color;
+        return bgColor;
     }
 
     /*
