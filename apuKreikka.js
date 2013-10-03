@@ -18,6 +18,7 @@ for (var j = 1; j < greekWords.length; j++) {
 }
 var nayttoSolu = new ScreenSolu();
 var tapahtuma = new Tapahtuma();
+var maalaa = new Maalaa();
 var tabIndex = 1;
 var s_tabIndex = 0;
 
@@ -40,7 +41,7 @@ window.onload = function() {
         tabIndex = tabIndex + s_tabIndex;
     }
     naytto.tulostaLyhenteet();
-    
+
 }
 
 /* Tapahtuma-olio, joka omistaa asetaKuuntelija()-metodin.
@@ -141,7 +142,7 @@ function Screen(kirje)
         var divAlaTausta = document.createElement("div");
         divAlaTausta.className = "alaPalkkiTausta";
         document.body.appendChild(divAlaTausta);
-        
+
         var divAla = document.createElement("div");
         divAla.className = "alaPalkki";
         divAlaTausta.appendChild(divAla);
@@ -235,6 +236,14 @@ function Screen(kirje)
                         sizes: [48, 48],
                         onclick: function() {
                             avaaIframe("iframe");
+                        }
+                    },
+                    {
+                        name: "kuvakkeet/korosta",
+                        extension: ".png",
+                        sizes: [48, 48],
+                        onclick: function() {
+                            maalaa.maalaaSelectedText();
                         }
                     }
                 ], 38, 48, 2);
@@ -358,6 +367,7 @@ function ScreenSolu()
         var label = document.createElement("label"); //kreikan sana
         label.appendChild(document.createTextNode(sanaOliot[jaeNro][sananPaikka].getGreekWord()));
         label.className = "solu-greekWord-label";
+        label.setAttribute("style", "background: red;");
         divSolu.appendChild(label);
 
         //<input id=suomennos/>
@@ -441,5 +451,76 @@ function Sana(grkWord, sm, color, sijainti)
     function setColor(newColor)
     {
         this.color = newColor;
+    }
+}
+
+/* Maalaa-olio, joka laittaa päälle maalaustyökalun ja huolehtii varsinaisesta
+ * sanan maalaamisesta
+ * Toimintaperiaate: 1) maalaa sana 2) paina maalauspainiketta/väriä => sana maalataan
+ * Eli maalauspainike ei laita päälle mitään maalaustyökalua vaan siitä saa valittua värin
+ * => maalauspainikkeen voisi korvata eri väreillä/värivalikolla
+ * 
+ * Nyt homma toimii, mutta ilman yhteistyötä sana-olioiden kanssa => ei voi tallentaa niin helposti
+ * TODO: yhteistyöhön sana-olioiden kanssa. getColor() ja setColor(). Tätä varten pitää jotenkin 
+ * tunnistaa mistä sana-oliosta on kyse. Pitäisikö kenties ympäröidä kaikki sanat span-elementillä?
+ * Vai maalata label-elementti, jolloin punainen väri täyttää koko labeli (pelkän tekstin lisäksi)?
+ * 
+ * Kuitenkin ydinongelma on nyt saada selville, mikä label on valittuna???
+ * 
+ * @returns {Sana}
+ */
+function Maalaa()
+{
+    this.maalausNappiaPainettu = maalausNappiaPainettu;
+    this.maalaaSelectedText = maalaaSelectedText;
+
+
+    /* Maalaa valitun tekstin
+     * 
+     * @returns {undefined}
+     */
+    function maalausNappiaPainettu()
+    {
+        //maalaaSelectedText();
+    }
+
+    /* Laittaa käyttäjän valitseman tekstin ympärille span-elementit
+     * Netistä ladattu: jostain stackoverflow.com
+     * 
+     * @returns {unresolved}
+     */
+    function maalaaSelectedText() {
+
+        if (typeof window.getSelection != "undefined") { //tämä ilmeisesti ei-ie:lle
+            var span = document.createElement("span");
+            span.setAttribute("style", "background-color: red;");
+            var valinta = window.getSelection();
+            var range = valinta.getRangeAt(0);
+            range.surroundContents(span);
+            poistaValinta();
+
+
+        } else if (typeof document.selection != "undefined" && document.selection.type == "Text") { //tämä ie:lle
+            text = document.selection.createRange().text;
+            poistaValinta();
+
+        }
+
+        /*
+         * Poistaa käyttäjän valinnan. Netistä ladattu
+         * http://stackoverflow.com/questions/3169786/clear-text-selection-with-javascript
+         */
+        function poistaValinta() {
+            if (window.getSelection) {
+                if (window.getSelection().empty) {  // Chrome
+                    window.getSelection().empty();
+                } else if (window.getSelection().removeAllRanges) {  // Firefox
+                    window.getSelection().removeAllRanges();
+                }
+            } else if (document.selection) {  // IE?
+                document.selection.empty();
+            }
+        }
+
     }
 }
