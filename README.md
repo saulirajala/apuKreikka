@@ -1,25 +1,23 @@
 apuKreikka
 ==========
-2.10.2013 
-Ensimmäinen toimiva ja siistitty prototyyppi. Toiminnallisuutta:
-- osaa luoda staattisina parametreina (3. jaetta) annetuista kreikankielisistä sanoista ja
-    sijamuodoista Sana-oliotaulukon
-- tulostaa Sana-oliot oikein (tässä käytetään Screen- ja ScreenSolu -olioita)
-- osaa tarkistaa käyttäjän syöttämän sijamuodon oikeellisuus, eli validoi
-    käyttäjän kielioppi analyysin. (Tapahtuma-olio)
-- tulostaa lyhenteet ja navi-palkin. Paremmassa versiossa lyhenteet voisivat
-    tulla näkyviin, kun hiiren vie oikeaan laitaan. Näin >90% sivun tilasta
-    saataisiin varsinaiselle tekstille. Voisi myös pysyä tämä sivupalkki, mukana
-    vaikka scrollaa alaspäin. (Tämä ilmeisesti css-kikkailua)
+10.10.13
+Työskennellään tallennuksen ja latauksen parissa.
+Javascriptillä ei voi tallentaa, joten pitää ajax-kutsulla ja PHP:llä tallentaa.
 
-Puuttuva toiminnallisuus:
-- pitää pystyä maalaamaan sanoja (esim. perusmuotoiset verbit punaisella, 
-    partisiipit vaaleansinisellä, jne.)
-- pitää pystyä tallentamaan ja lukemaan käyttäjän koneelle/-lta
+Homman tulee toimia seuraavasti:
+1) Ohjelman latautuessa muodostetaan jokaisesta Sana-oliosta JSON merkkijono 
+    => laitetaan taulukkoon: JSON_sanat[jae][paikka]. Eli tämä tapahtuu heti sen
+    jälkeen, kun sanat-oliot on luotu.
+2) käyttäjän syöttäessä jotain => tarkista(). Ennen kuin tarkistetaan metodi 
+    muuttaa JSON_sanat taulukosta ko. kohdan tekstin uudenlaiseksi 
+    JSON merkkijonoksi. Tällöin mukaan tulee uusi käyttäjän syöte
+    
+    TODO
+    2)-kohta tulee käydä läpi myös, kun syötetään suomennos tai maalataan tekstiä
 
-Muuten todo:
-- navi-/lyhenteet-palkkien fiksausta ja koristelua
-- main-ikkuna ulkoasullisesti nätimmäksi
+3) Lataaminen on ihan oma juttunsa vielä
+
+
 
 apuKreikka 2.0 olioilla.
 websovellus, joka auttaa kääntämään Ut:n kreikkaa.

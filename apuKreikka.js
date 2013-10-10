@@ -1,3 +1,8 @@
+var JSON_sanat = new Array();
+JSON_sanat[0] = new Array();
+JSON_sanat[1] = new Array();
+JSON_sanat[2] = new Array();
+JSON_sanat[3] = new Array();
 var greekWords = new Array();
 greekWords[0] = new Array("Kuinka monta jaetta"); //pitäisi sisällään tarvittavaa meta-tietoa: jakeiden määrä, yms.
 greekWords[1] = new Array("Παῦλος", "δοῦλος", "Χριστοῦ", "Ἰησοῦ,", "κλητὸς", "ἀπόστολος,", "ἀφωρισμένος", "εἰς", "εὐαγγέλιον", "θεοῦ,");
@@ -21,6 +26,10 @@ var tapahtuma = new Tapahtuma();
 var maalaa = new Maalaa();
 var tabIndex = 1;
 var s_tabIndex = 0;
+
+
+var str;
+var obj;
 
 
 /* kaikki näkyvä tulostus täytyy tapahtua vasta ikkunan ladattua eli tässä
@@ -77,6 +86,8 @@ function Tapahtuma()
         var id = this.getAttribute("id");
         id = id.slice(9).toString();  //id=1-0
         var taulukko = id.split("-"); // {1, 0}
+        sanaOliot[taulukko[0]][taulukko[1]].setInput(this.value.toUpperCase()); //asetaan käyttäjän syöte olioon
+        JSON_sanat[taulukko[0]][taulukko[1]] = JSON.stringify(sanaOliot[taulukko[0]][taulukko[1]]);
         if (this.value.toUpperCase() === sanaOliot[taulukko[0]][taulukko[1]].getSijamuoto()) {
             document.getElementById("kuvake" + id).className = "visible";
             document.getElementById("kuvake" + id).src = "http://www.lookseeedit.com/resources/tick.jpg";
@@ -224,10 +235,7 @@ function Screen(kirje)
                         extension: ".png",
                         sizes: [48, 48],
                         onclick: function() {
-                            if ($("tulostus").getAttribute("class") != "hidden")
-                                avaaIframe("tulostus");
-                            else
-                                tallenna();
+                            console.log(JSON_sanat.toString());
                         }
                     },
                     {
@@ -235,7 +243,10 @@ function Screen(kirje)
                         extension: ".png",
                         sizes: [48, 48],
                         onclick: function() {
-                            avaaIframe("iframe");
+                            
+                            var teksti = "{\"greekWord\":\"Παῦλος\",\"sijamuoto\":\"N-NSM\",\"bgColor\":\"#ffffff\",\"paikka\":\"1-0\",\"userInput\":\"N-SNM\"}";
+                            var obj = JSON.parse(teksti);
+                            console.log(obj);
                         }
                     },
                     {
@@ -397,23 +408,29 @@ function ScreenSolu()
  */
 function Sana(grkWord, sm, color, sijainti)
 {
-    var greekWord = grkWord; //luo yksityisen muuttujan, joka saatavilla vain oliolle. TODO: muuta kaikki     
-    var sijamuoto = sm;
-    var bgColor = color;
-    var paikka = sijainti;
+    this.greekWord = grkWord; //luo yksityisen muuttujan, joka saatavilla vain oliolle. TODO: muuta kaikki     
+    this.sijamuoto = sm;
+    this.userInput;  //käyttäjän syöttämä input, joka tallennetaan
+    this.bgColor = color;
+    this.paikka = sijainti;
     this.getGreekWord = getGreekWord;
     this.getSijamuoto = getSijamuoto;
     this.getPaikka = getPaikka;
+    this.getInput = getInput;
     this.getBgColor = getBgColor;
     this.setColor = setColor;
-
+    this.setInput = setInput;
+    
+    var jae = this.paikka.split("-"); // {1, 0}
+    
+    JSON_sanat[jae[0]][jae[1]] = JSON.stringify(this);
     /* 
      * Funktion tehtävänä palauttaa olion kreikkalainen "nimi"
      * @returns {string} greekWord - palauttaa kreikankielisen sanan
      */
     function getGreekWord()
     {
-        return greekWord;
+        return this.greekWord;
     }
 
     /*
@@ -422,7 +439,7 @@ function Sana(grkWord, sm, color, sijainti)
      */
     function getSijamuoto()
     {
-        return sijamuoto;
+        return this.sijamuoto;
     }
 
     /*
@@ -431,7 +448,7 @@ function Sana(grkWord, sm, color, sijainti)
      */
     function getPaikka()
     {
-        return paikka;
+        return this.paikka;
     }
 
     /*
@@ -440,7 +457,12 @@ function Sana(grkWord, sm, color, sijainti)
      */
     function getBgColor()
     {
-        return bgColor;
+        return this.bgColor;
+    }
+    
+    function getInput()
+    {
+        return this.userInput;
     }
 
     /*
@@ -450,7 +472,12 @@ function Sana(grkWord, sm, color, sijainti)
      */
     function setColor(newColor)
     {
-        this.color = newColor;
+        this.bgColor = newColor;
+    }
+    
+    function setInput(input)
+    {
+        this.userInput = input;
     }
 }
 
