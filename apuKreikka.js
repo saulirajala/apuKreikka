@@ -367,7 +367,7 @@ function ScreenSolu()
         var label = document.createElement("label"); //kreikan sana
         label.appendChild(document.createTextNode(sanaOliot[jaeNro][sananPaikka].getGreekWord()));
         label.className = "solu-greekWord-label";
-        label.setAttribute("style", "background: red;");
+        //label.setAttribute("style", "background: red;");
         divSolu.appendChild(label);
 
         //<input id=suomennos/>
@@ -466,6 +466,17 @@ function Sana(grkWord, sm, color, sijainti)
  * Vai maalata label-elementti, jolloin punainen väri täyttää koko labeli (pelkän tekstin lisäksi)?
  * 
  * Kuitenkin ydinongelma on nyt saada selville, mikä label on valittuna???
+ * 
+ * 
+ * Todennäköisesti tämä täytyy tehdä niin, että jokaiseen labeliin lisätään
+ * kuuntelija joka kuuntelee koska label maalataan. Tällöin toiminnallisuus 
+ * olisi seuraavanlainen:
+ * 1) paina maalaa-painiketta
+ * 2) valitse sanan, jonka haluat maalata => ohjelma automaattisesti maalaa sanan
+ *      ja poistaa valinnan
+ *      
+ * Jätetään tämä asia hautumaan ja siirrytään olioiden tallentamiseen ja 
+ * lataamiseen, mikä on tällä hetkellä suurin ongelma.
  * 
  * @returns {Sana}
  */
