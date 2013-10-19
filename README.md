@@ -14,14 +14,23 @@ Homman tulee toimia seuraavasti:
 Mutta nyt siis oliot sarjalisoidaan ja ovat siten valmiita tiedostoon 
 tallennukseen.
 
-Tämä toteutetaan PHP:llä. Samalla pitää tallentaa metatietoja 
-(mikä kirja ja luku), jotta voi ladata oikein => TODO
+Tallennus tapahtuu siten, että tulostetaan joko uudelle välilehteen/alertin avulla
+JSON stringit => käyttäjä kopioi ne => käyttäjä tallentaa tiedoston
 
-      
+ToDo:
+-kopiointi ohjeet (nyt toimii alertilla, mikä on ok ainakin toistaiseksi) Joskus
+ voisi tehdä fiksummin    
 
 2) Lataaminen
+Lataus tapahtuu: Käyttäjä painaa lataus-painiketta => aukeaa ikkuna, johon voi 
+kopioida tiedostossa olevan tekstin => Käyttäjä kopioi teksin => 
+käyttäjä painaa ok => uusi sivu latautuu
+
 - käyttäjä painaa lataa-painiketta => syöttää tekstitiedoston => ohjelma avaa
     uuden sivun eli sen sivun, joka käyttäjällä on tallennettuna
+- Kannattaisiko muokata SanaOlioiden muodostusta siten, että aina ne muodostetaan
+    JSON.parse-metodin avulla. JSON stringi tulee joko käyttäjältä tai tietokannasta??
+- JSON.parse ei osaa lukea kuin vain yhden olion attribuutit kerrallaan
 
 
 

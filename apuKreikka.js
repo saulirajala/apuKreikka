@@ -1,9 +1,3 @@
-//TODO näitä ei kannata luoda vielä nyt. Vasta kun tallenna painiketta painetaan??
-var JSON_sanat = new Array();
-JSON_sanat[0] = new Array();
-JSON_sanat[1] = new Array();
-JSON_sanat[2] = new Array();
-JSON_sanat[3] = new Array();
 var greekWords = new Array();
 greekWords[0] = new Array("Kuinka monta jaetta"); //pitäisi sisällään tarvittavaa meta-tietoa: jakeiden määrä, yms.
 greekWords[1] = new Array("Παῦλος", "δοῦλος", "Χριστοῦ", "Ἰησοῦ,", "κλητὸς", "ἀπόστολος,", "ἀφωρισμένος", "εἰς", "εὐαγγέλιον", "θεοῦ,");
@@ -236,7 +230,13 @@ function Screen(kirje)
                         extension: ".png",
                         sizes: [48, 48],
                         onclick: function() {
-                            //tallennus = JSON_sanat.toString();  //häiritsee tämä toString, koska parse ei osaa suoraan lukea tätä
+                            var JSON_sanat = new Array();
+                            for (var j = 1; j < sanaOliot.length; j++) {
+                                JSON_sanat[j] = new Array();
+                                for (var i = 0; i < sanaOliot[j].length; i++) {
+                                    JSON_sanat[j][i] = JSON.stringify(sanaOliot[j][i]);
+                                }
+                            }
                             tallennus = JSON_sanat.toString().replace(/\\/g, "");
                             tallennus = tallennus.replace(/\},","\{/g, "},{");
                             alert(tallennus);
@@ -429,9 +429,7 @@ function Sana(grkWord, sm, color, sijainti)
 
     var jae = paikka.split("-"); // {1, 0}
 
-    JSON_sanat[jae[0]][jae[1]] = JSON.stringify(this);
-
-    /** Tällä voidaan ehkä ylikirjoitetaan se, mitä Stringify oletuksena palauttaa*/
+    /* Tällä ylikirjoitetaan se, mitä Stringify oletuksena palauttaa */
     function toJSON() {
         return '{"greekWord":"' + greekWord + '","sijamuoto":"' + sijamuoto + '","userInput":"' + userInput + '","bgColor":"' + bgColor + '","paikka":"' + paikka + '"},';
     }
