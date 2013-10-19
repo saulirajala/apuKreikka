@@ -239,7 +239,7 @@ function Screen(kirje)
                             //tallennus = JSON_sanat.toString();  //häiritsee tämä toString, koska parse ei osaa suoraan lukea tätä
                             tallennus = JSON_sanat.toString().replace(/\\/g, "");
                             tallennus = tallennus.replace(/\},","\{/g, "},{");
-                            console.log(tallennus);
+                            alert(tallennus);
                         }
                     },
                     {
