@@ -1,3 +1,4 @@
+//TODO näitä ei kannata luoda vielä nyt. Vasta kun tallenna painiketta painetaan??
 var JSON_sanat = new Array();
 JSON_sanat[0] = new Array();
 JSON_sanat[1] = new Array();
@@ -26,7 +27,7 @@ var tapahtuma = new Tapahtuma();
 var maalaa = new Maalaa();
 var tabIndex = 1;
 var s_tabIndex = 0;
-
+var tallennus = "";
 
 var str;
 var obj;
@@ -235,7 +236,10 @@ function Screen(kirje)
                         extension: ".png",
                         sizes: [48, 48],
                         onclick: function() {
-                            console.log(JSON_sanat.toString());
+                            //tallennus = JSON_sanat.toString();  //häiritsee tämä toString, koska parse ei osaa suoraan lukea tätä
+                            tallennus = JSON_sanat.toString().replace(/\\/g, "");
+                            tallennus = tallennus.replace(/\},","\{/g, "},{");
+                            console.log(tallennus);
                         }
                     },
                     {
@@ -243,9 +247,10 @@ function Screen(kirje)
                         extension: ".png",
                         sizes: [48, 48],
                         onclick: function() {
-                            
-                            var teksti = "{\"greekWord\":\"Παῦλος\",\"sijamuoto\":\"N-NSM\",\"bgColor\":\"#ffffff\",\"paikka\":\"1-0\",\"userInput\":\"N-SNM\"}";
-                            var obj = JSON.parse(teksti);
+
+                            var teksti = "{\"greekWord\":\"Παῦλος\",\"sijamuoto\":\"N-NSM\",\"userInput\":\"tyhja\",\"bgColor\":\"#ffffff\",\"paikka\":\"1-0\"}";
+                            var obj = JSON.parse(teksti); //osaisiko parse vain yhden ei monen kokoelmaa
+                            //console.log(tallennus);
                             console.log(obj);
                         }
                     },
@@ -408,11 +413,11 @@ function ScreenSolu()
  */
 function Sana(grkWord, sm, color, sijainti)
 {
-    this.greekWord = grkWord; //luo yksityisen muuttujan, joka saatavilla vain oliolle. TODO: muuta kaikki     
-    this.sijamuoto = sm;
-    this.userInput;  //käyttäjän syöttämä input, joka tallennetaan
-    this.bgColor = color;
-    this.paikka = sijainti;
+    var greekWord = grkWord; //luo yksityisen muuttujan, joka saatavilla vain oliolle. TODO: muuta kaikki     
+    var sijamuoto = sm;
+    var userInput = "tyhja";  //käyttäjän syöttämä input, joka tallennetaan
+    var bgColor = color;
+    var paikka = sijainti;
     this.getGreekWord = getGreekWord;
     this.getSijamuoto = getSijamuoto;
     this.getPaikka = getPaikka;
@@ -420,17 +425,23 @@ function Sana(grkWord, sm, color, sijainti)
     this.getBgColor = getBgColor;
     this.setColor = setColor;
     this.setInput = setInput;
-    
-    var jae = this.paikka.split("-"); // {1, 0}
-    
+    this.toJSON = toJSON;
+
+    var jae = paikka.split("-"); // {1, 0}
+
     JSON_sanat[jae[0]][jae[1]] = JSON.stringify(this);
+
+    /** Tällä voidaan ehkä ylikirjoitetaan se, mitä Stringify oletuksena palauttaa*/
+    function toJSON() {
+        return '{"greekWord":"' + greekWord + '","sijamuoto":"' + sijamuoto + '","userInput":"' + userInput + '","bgColor":"' + bgColor + '","paikka":"' + paikka + '"},';
+    }
     /* 
      * Funktion tehtävänä palauttaa olion kreikkalainen "nimi"
      * @returns {string} greekWord - palauttaa kreikankielisen sanan
      */
     function getGreekWord()
     {
-        return this.greekWord;
+        return greekWord;
     }
 
     /*
@@ -439,7 +450,7 @@ function Sana(grkWord, sm, color, sijainti)
      */
     function getSijamuoto()
     {
-        return this.sijamuoto;
+        return sijamuoto;
     }
 
     /*
@@ -448,7 +459,7 @@ function Sana(grkWord, sm, color, sijainti)
      */
     function getPaikka()
     {
-        return this.paikka;
+        return paikka;
     }
 
     /*
@@ -457,12 +468,12 @@ function Sana(grkWord, sm, color, sijainti)
      */
     function getBgColor()
     {
-        return this.bgColor;
+        return bgColor;
     }
-    
+
     function getInput()
     {
-        return this.userInput;
+        return userInput;
     }
 
     /*
@@ -472,12 +483,12 @@ function Sana(grkWord, sm, color, sijainti)
      */
     function setColor(newColor)
     {
-        this.bgColor = newColor;
+        bgColor = newColor;
     }
-    
+
     function setInput(input)
     {
-        this.userInput = input;
+        userInput = input;
     }
 }
 
