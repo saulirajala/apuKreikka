@@ -45,6 +45,7 @@ window.onload = function() {
         tabIndex = tabIndex + s_tabIndex;
     }
     naytto.tulostaLyhenteet();
+    naytto.tulostaIframe();
 
 }
 
@@ -114,6 +115,7 @@ function Screen(kirje)
     this.tulostaJae = tulostaJae;
     this.tulostaLyhenteet = tulostaLyhenteet;
     this.tulostaNavi = tulostaNavi;
+    this.tulostaIframe = tulostaIframe;
 
     var divMain = document.createElement("div");
     divMain.className = "divMain";
@@ -121,6 +123,30 @@ function Screen(kirje)
     var h1 = document.createElement("h1");
     h1.appendChild(document.createTextNode(kirje));
     divMain.appendChild(h1);
+
+    /*
+     * 
+     * @returns {undefined}
+     */
+    function tulostaIframe() {
+        /*<div id="iframe" class="hidden">
+                             <form name="iframeForm">
+                             <label for="tekstiAlue">Kopioi tähän aiemmat merkintäsi</label><br />   
+                             <textarea name="tekstiAlue" id="tekstiAlue"></textarea>
+                             <input type="button" value="Lataa" onclick="tuoVanhat()">*/
+        
+        var iframe = document.createElement("iframe");
+        iframe.id = "iframe";
+        iframe.className = "lataaIframe_hidden";
+        var form = document.createElement("form");
+        form.name = "iframeForm";
+        var input = document.createElement("input");
+        input.type = "button";
+        input.value = "Lataa";
+        form.appendChild(input);
+        iframe.appendChild(form);
+        document.body.appendChild(iframe);
+    }
 
     /*
      * Tulostaa halutun jakeen. Käyttää apurina ScreenSolu-oliota.
@@ -247,11 +273,21 @@ function Screen(kirje)
                         extension: ".png",
                         sizes: [48, 48],
                         onclick: function() {
+                            /*
+                             var teksti = "{\"greekWord\":\"Παῦλος\",\"sijamuoto\":\"N-NSM\",\"userInput\":\"tyhja\",\"bgColor\":\"#ffffff\",\"paikka\":\"1-0\"}";
+                             var obj = JSON.parse(teksti); //osaisiko parse vain yhden ei monen kokoelmaa
+                             //console.log(tallennus);
+                             console.log(obj);*/
 
-                            var teksti = "{\"greekWord\":\"Παῦλος\",\"sijamuoto\":\"N-NSM\",\"userInput\":\"tyhja\",\"bgColor\":\"#ffffff\",\"paikka\":\"1-0\"}";
-                            var obj = JSON.parse(teksti); //osaisiko parse vain yhden ei monen kokoelmaa
-                            //console.log(tallennus);
-                            console.log(obj);
+                            
+                            if (document.getElementById("iframe").className == "lataaIframe_hidden") {
+                                document.getElementById("iframe").className = "lataaIframe_visible";
+                            }
+                            else {
+                                document.getElementById("iframe").className = "lataaIframe_hidden";
+                            }
+                            ;
+
                         }
                     },
                     {
