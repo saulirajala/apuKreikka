@@ -83,7 +83,6 @@ function Tapahtuma()
         id = id.slice(9).toString();  //id=1-0
         var taulukko = id.split("-"); // {1, 0}
         sanaOliot[taulukko[0]][taulukko[1]].setInput(this.value.toUpperCase()); //asetaan käyttäjän syöte olioon
-        JSON_sanat[taulukko[0]][taulukko[1]] = JSON.stringify(sanaOliot[taulukko[0]][taulukko[1]]);
         if (this.value.toUpperCase() === sanaOliot[taulukko[0]][taulukko[1]].getSijamuoto()) {
             document.getElementById("kuvake" + id).className = "visible";
             document.getElementById("kuvake" + id).src = "http://www.lookseeedit.com/resources/tick.jpg";
@@ -129,23 +128,26 @@ function Screen(kirje)
      * @returns {undefined}
      */
     function tulostaIframe() {
-        /*<div id="iframe" class="hidden">
-                             <form name="iframeForm">
-                             <label for="tekstiAlue">Kopioi tähän aiemmat merkintäsi</label><br />   
-                             <textarea name="tekstiAlue" id="tekstiAlue"></textarea>
-                             <input type="button" value="Lataa" onclick="tuoVanhat()">*/
-        
-        var iframe = document.createElement("iframe");
-        iframe.id = "iframe";
-        iframe.className = "lataaIframe_hidden";
+        var divIframe = document.createElement("div");
+        divIframe.id = "iframe";
+        divIframe.className = "lataaIframe_hidden";
         var form = document.createElement("form");
         form.name = "iframeForm";
         var input = document.createElement("input");
         input.type = "button";
         input.value = "Lataa";
+        input.setAttribute("onClick", "lataa");
+        var label = document.createElement("label");
+        label.setAttribute("for", "tekstiAlue");
+        label.appendChild(document.createTextNode("Kopioi tähän aiemmat merkintäsi"));
+        var textarea = document.createElement("textarea");
+        textarea.name = "tekstiAlue";
+        textarea.id = "tekstiAlue";
+        form.appendChild(label);
+        form.appendChild(textarea);
         form.appendChild(input);
-        iframe.appendChild(form);
-        document.body.appendChild(iframe);
+        divIframe.appendChild(form);
+        document.body.appendChild(divIframe);
     }
 
     /*

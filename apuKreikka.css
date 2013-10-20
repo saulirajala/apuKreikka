@@ -41,10 +41,13 @@ body{
     display: none;
 }
 .divNaviTausta{
-    background: transparent;
+    background: white;
     width: 100%;
     position: fixed;
     top: 0; 
+    -moz-box-shadow: 10px 10px 5px #ffffff;
+    -webkit-box-shadow: 10px 10px 5px #ffffff;
+    box-shadow: 10px 10px 5px #ffffff;
 }
 
 
@@ -56,6 +59,9 @@ body{
     margin-right: auto;
     border: 2px solid #000000;
     border-radius: 25px;
+    -moz-box-shadow: 10px 10px 5px #888;
+    -webkit-box-shadow: 10px 10px 5px #888;
+    box-shadow: 10px 10px 5px #888;
 }
 
 .divNaviDockLeft{
@@ -155,7 +161,33 @@ body{
     background: white;
     border: 2px solid #000000;
     border-radius: 50px;
+    -moz-box-shadow: 10px 10px 5px #888;
+    -webkit-box-shadow: 10px 10px 5px #888;
+    box-shadow: 10px 10px 5px #888;
 }
+
+
+.lataaIframe_visible label {
+    margin-top: 100px;
+    margin-left: 50px;
+}
+
+.lataaIframe_visible textarea {
+    width: 90%;
+    height: 200px;
+    margin-left: 10px;
+    margin-top: 20px;
+}
+
+.lataaIframe_visible input {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin-bottom: 30px;
+    margin-left: 10px;
+    width: 90%;
+}
+
 
 .lataaIframe_hidden {
     display: none;

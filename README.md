@@ -1,8 +1,8 @@
 apuKreikka
 ==========
-19.10.13
-Työskennellään tallennuksen ja latauksen parissa.
-Javascriptillä ei voi tallentaa, joten pitää ajax-kutsulla ja PHP:llä tallentaa.
+20.10.13
+- lataus iframe on nyt valmiina
+- Todo: lataus()-metodi
 
 Homman tulee toimia seuraavasti:
 1) tallennus-nappia painettaessa, tallennetaan olion attribuutit tiedostoon 
@@ -31,6 +31,8 @@ käyttäjä painaa ok => uusi sivu latautuu
 - Kannattaisiko muokata SanaOlioiden muodostusta siten, että aina ne muodostetaan
     JSON.parse-metodin avulla. JSON stringi tulee joko käyttäjältä tai tietokannasta??
 - JSON.parse ei osaa lukea kuin vain yhden olion attribuutit kerrallaan
+
+
 
 
 
