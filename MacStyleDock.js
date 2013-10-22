@@ -51,6 +51,7 @@ function MacStyleDock(node, imageDetails, minimumSize, maximumSize, range){
   // set the height of the dock containers to equal that of the maximised icons
   iconsNode.style.height  = maximumSize + 'px';
   reflectedIconsNode.style.height  = maximumSize + 'px';
+  reflectedIconsNode.style.display = "none";
 
   // initialise the maximum width to 0
   var maximumWidth  = 0;

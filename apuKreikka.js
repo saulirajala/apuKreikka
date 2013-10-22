@@ -1,30 +1,21 @@
-var greekWords = new Array();
-greekWords[0] = new Array("Kuinka monta jaetta"); //pitäisi sisällään tarvittavaa meta-tietoa: jakeiden määrä, yms.
-greekWords[1] = new Array("Παῦλος", "δοῦλος", "Χριστοῦ", "Ἰησοῦ,", "κλητὸς", "ἀπόστολος,", "ἀφωρισμένος", "εἰς", "εὐαγγέλιον", "θεοῦ,");
-greekWords[2] = new Array("2ὃ ", "προεπηγγείλατο ", "διὰ ", "τῶν ", "προφητῶν ", "αὐτοῦ ", "ἐν ", "γραφαῖς ", "ἁγίαις,");
-greekWords[3] = new Array("3περὶ ", "τοῦ ", "υἱοῦ ", "αὐτοῦ ", "τοῦ ", "γενομένου ", "ἐκ ", "σπέρματος ", "Δαυὶδ ", "κατὰ ", "σάρκα,");
-var sijamuodot = new Array();
-sijamuodot[1] = new Array("N-NSM", "N-NSM", "N-GSM", "N-GSM", "A-NSM", "N-NSM", "V-RPP-NSM", "PREP", "N-ASN", "N-GSM");
-sijamuodot[2] = new Array("R-ASN", "V-ADI-3S", "PREP", "T-GPM", "N-GPM", "P-GSM", "PREP", "N-DPF", "A-DPF");
-sijamuodot[3] = new Array("PREP", "T-GSM", "N-GSM", "P-GSM", "T-GSM", "V-2ADP-GSM", "PREP", "N-GSN", "N-PRI", "PREP", "N-ASF");
 //greekWords[jaeNro][sanat]
+var greekWords = new Array();
+var sijamuodot = new Array();
+var portti = new Portti();
 
 var sanaOliot = new Array();
-for (var j = 1; j < greekWords.length; j++) {
-    sanaOliot[j] = new Array();
-    for (var i = 0; i < greekWords[j].length; i++) {
-        sanaOliot[j][i] = new Sana(greekWords[j][i], sijamuodot[j][i], "#ffffff", j + "-" + i);
-    }
-}
+sanaOliot[1] = new Array();
+sanaOliot[2] = new Array();
+sanaOliot[3] = new Array();
 var nayttoSolu = new ScreenSolu();
 var tapahtuma = new Tapahtuma();
 var maalaa = new Maalaa();
 var tabIndex = 1;
 var s_tabIndex = 0;
 var tallennus = "";
-
+var naytto;
 var str;
-var obj;
+
 
 
 /* kaikki näkyvä tulostus täytyy tapahtua vasta ikkunan ladattua eli tässä
@@ -37,16 +28,102 @@ var obj;
  * @returns {undefined}
  */
 window.onload = function() {
+    naytto = new Screen("Roomalaiskirje");
+    naytto.tulostaKysymys();
+}
 
-    var naytto = new Screen("Roomalaiskirje");
-    naytto.tulostaNavi();
-    for (var jaeNro = 1; jaeNro < sanaOliot.length; jaeNro++) {
-        naytto.tulostaJae(jaeNro);
-        tabIndex = tabIndex + s_tabIndex;
+function Portti() {
+
+    this.lataaVanha = lataaVanha; //ladataan sanat, yms. käyttäjän syötteestä
+    this.lataaUusi = lataaUusi; //ladataan sanat, yms. "tietokannasta"
+    this.makeSanaOliot = makeSanaOliot;
+    this.lataaInput = lataaInput;
+
+    /*
+     * 
+     * @returns {undefined}
+     */
+    function makeSanaOliot() {
+        naytto.tulostaOtsikko();
+        for (var j = 1; j < greekWords.length; j++) {
+            sanaOliot[j] = new Array();
+            for (var i = 0; i < greekWords[j].length; i++) {
+                sanaOliot[j][i] = new Sana(greekWords[j][i], sijamuodot[j][i], "#ffffff", j + "-" + i, "", "");
+            }
+        }
+
+
+        document.getElementById("lataaUusi").setAttribute("style", "display: none;");
+        document.getElementById("lataaVanha").setAttribute("style", "display: none;");
+        naytto.tulostaJakeet();
+        naytto.tulostaNavi();
+        naytto.tulostaLyhenteet();
+        //naytto.tulostaIframe();
+
     }
-    naytto.tulostaLyhenteet();
-    naytto.tulostaIframe();
 
+    /*
+     * 
+     * @returns {undefined}
+     */
+    function lataaUusi() {
+
+        greekWords[0] = new Array("Kuinka monta jaetta"); //pitäisi sisällään tarvittavaa meta-tietoa: jakeiden määrä, yms.
+        greekWords[1] = new Array("1Παῦλος", "δοῦλος", "Χριστοῦ", "Ἰησοῦ,", "κλητὸς", "ἀπόστολος,", "ἀφωρισμένος", "εἰς", "εὐαγγέλιον", "θεοῦ,");
+        greekWords[2] = new Array("2ὃ ", "προεπηγγείλατο ", "διὰ ", "τῶν ", "προφητῶν ", "αὐτοῦ ", "ἐν ", "γραφαῖς ", "ἁγίαις,");
+        greekWords[3] = new Array("3περὶ ", "τοῦ ", "υἱοῦ ", "αὐτοῦ ", "τοῦ ", "γενομένου ", "ἐκ ", "σπέρματος ", "Δαυὶδ ", "κατὰ ", "σάρκα,");
+
+        sijamuodot[1] = new Array("N-NSM", "N-NSM", "N-GSM", "N-GSM", "A-NSM", "N-NSM", "V-RPP-NSM", "PREP", "N-ASN", "N-GSM");
+        sijamuodot[2] = new Array("R-ASN", "V-ADI-3S", "PREP", "T-GPM", "N-GPM", "P-GSM", "PREP", "N-DPF", "A-DPF");
+        sijamuodot[3] = new Array("PREP", "T-GSM", "N-GSM", "P-GSM", "T-GSM", "V-2ADP-GSM", "PREP", "N-GSN", "N-PRI", "PREP", "N-ASF");
+
+        makeSanaOliot();
+    }
+
+
+    function lataaVanha() {
+        naytto.tulostaIframe();
+        //lataaInput();
+    }
+
+    /* TODO 
+     * 
+     * Tässä vaiheessa SanaOliot-taulukkoa ei ole vielä esittelyä enempää luotu.
+     * Siksi tässä pitäisi jotenkin pyöräyttää vastaavat for-silmukat kuin makeSanaOliot()
+     * Haastavaksi tämän tekee, ettei JSON:nnässä ole eroteltu jakeita mitenkään
+     * vaan kaikki ovat putkeen => pitää parsettaa paikasta
+     * @param {type} arvo
+     * @returns {undefined}
+     */
+    function lataaInput() {
+        naytto.tulostaOtsikko();
+        var JSON_teksti = document.getElementById("tekstiAlue").value;
+        //parsetetaan JSON_teksti siten, että vain yksi olio kerrallaan
+        var JSON_sanat = JSON_teksti.split("{"); //taulukkoon jokainen sana omaan soluun
+        var jae;
+        var paikka;
+        for (var k = 1; k < JSON_sanat.length; k++) {
+
+            //"{"greekWord":"PAavali","sijamuoto":"N-NSM","userInput":"DASF","bgColor":"#ffffff","paikka":"1-0"}"
+            var JSON_yksi = "{" + JSON_sanat[k].slice(0, (JSON_sanat[k].lastIndexOf("}") + 1)); //lopusta pois ,"-merkit
+            var id = JSON_yksi.slice((JSON_yksi.lastIndexOf(":") + 2), (JSON_yksi.lastIndexOf(":") + 5));
+
+            id = id.split("-");  //id=1-0
+            jae = id[0];
+            paikka = id[1];
+            var obj = JSON.parse(JSON_yksi);
+            sanaOliot[jae][paikka] = new Sana(obj.greekWord, obj.sijamuoto, obj.bgColor, obj.paikka, obj.userInput, obj.suomennus);
+
+        }
+        
+        document.getElementById("lataaUusi").setAttribute("style", "display: none;");
+        document.getElementById("lataaVanha").setAttribute("style", "display: none;");
+        document.getElementById("iframe").setAttribute("class", "hidden");
+        naytto.tulostaJakeet();
+        naytto.tulostaNavi();
+        naytto.tulostaLyhenteet();
+
+    }
 }
 
 /* Tapahtuma-olio, joka omistaa asetaKuuntelija()-metodin.
@@ -58,6 +135,7 @@ function Tapahtuma()
     // Liitetään metodit olioon:
     this.asetaKuuntelija = asetaKuuntelija;
     this.tarkista = tarkista;
+    this.tallennusOlioon = tallennusOlioon;
 
     /*  Funktio asettaa tapahtuman kuuntelijan parametrina tuotuun elementtiin
      * 
@@ -65,11 +143,34 @@ function Tapahtuma()
      * @returns {undefined}
      */
     function asetaKuuntelija(elementti) {
-        if (elementti.addEventListener) {
-            elementti.addEventListener('change', tarkista, false);
-        } else if (elementti.attachEvent) {
-            elementti.attachEvent('onchange', tarkista);
+        if (elementti.id.slice(0, 9) == "sijamuoto") {
+            if (elementti.addEventListener) {
+                elementti.addEventListener('change', tarkista, false);
+            } else if (elementti.attachEvent) {
+                elementti.attachEvent('onchange', tarkista);
+            }
         }
+        else {
+            if (elementti.addEventListener) {
+                elementti.addEventListener('change', tallennusOlioon, false);
+            } else if (elementti.attachEvent) {
+                elementti.attachEvent('onchange', tallennusOlioon);
+            }
+        }
+    }
+    
+    /* Tarkistaa onko input olion sijamuoto
+     * jos on => vaihtaa kuvan class=visible ja src=oikein.jpg
+     * jos ei => vaihtaa kuvan class=visible
+     * 
+     * @returns {undefined}
+     */
+    function tallennusOlioon() {
+        var id = this.getAttribute("id");
+        id = id.slice(9).toString();  //id=1-0
+        var taulukko = id.split("-"); // {1, 0}
+        sanaOliot[taulukko[0]][taulukko[1]].setSuomennus(this.value); //asetaan käyttäjän syöte olioon
+        
     }
 
     /* Tarkistaa onko input olion sijamuoto
@@ -115,13 +216,48 @@ function Screen(kirje)
     this.tulostaLyhenteet = tulostaLyhenteet;
     this.tulostaNavi = tulostaNavi;
     this.tulostaIframe = tulostaIframe;
+    this.tulostaKysymys = tulostaKysymys;
+    this.tulostaOtsikko = tulostaOtsikko;
+    this.tulostaJakeet = tulostaJakeet;
+    var divMain;
 
-    var divMain = document.createElement("div");
+    divMain = document.createElement("div");
     divMain.className = "divMain";
     document.body.appendChild(divMain);
-    var h1 = document.createElement("h1");
-    h1.appendChild(document.createTextNode(kirje));
-    divMain.appendChild(h1);
+
+    function tulostaJakeet() {
+        for (var jaeNro = 1; jaeNro < sanaOliot.length; jaeNro++) {
+            naytto.tulostaJae(jaeNro);
+            tabIndex = tabIndex + s_tabIndex;
+        }
+    }
+
+    function tulostaOtsikko() {
+        var h1 = document.createElement("h1");
+        h1.appendChild(document.createTextNode(kirje));
+        divMain.appendChild(h1);
+    }
+    /*
+     * 
+     * @returns {undefined}
+     */
+    function tulostaKysymys() {
+        var input = document.createElement("input");
+        input.type = "button";
+        input.value = "Uusi";
+        input.id = "lataaUusi";
+        input.setAttribute("style", "position: absolute; top: 100px; left: 0;")
+        input.setAttribute("onClick", "portti.lataaUusi()");
+
+        var input2 = document.createElement("input");
+        input2.type = "button";
+        input2.value = "Lataa vanha";
+        input2.id = "lataaVanha";
+        input2.setAttribute("style", "position: absolute; top: 100px; left: 100px;")
+        input2.setAttribute("onClick", "portti.lataaVanha()");
+        document.body.appendChild(input);
+        document.body.appendChild(input2);
+    }
 
     /*
      * 
@@ -130,19 +266,19 @@ function Screen(kirje)
     function tulostaIframe() {
         var divIframe = document.createElement("div");
         divIframe.id = "iframe";
-        divIframe.className = "lataaIframe_hidden";
+        divIframe.className = "lataaIframe_visible";
         var form = document.createElement("form");
         form.name = "iframeForm";
         var input = document.createElement("input");
         input.type = "button";
         input.value = "Lataa";
-        input.setAttribute("onClick", "lataa");
         var label = document.createElement("label");
         label.setAttribute("for", "tekstiAlue");
         label.appendChild(document.createTextNode("Kopioi tähän aiemmat merkintäsi"));
         var textarea = document.createElement("textarea");
         textarea.name = "tekstiAlue";
         textarea.id = "tekstiAlue";
+        input.setAttribute("onClick", "portti.lataaInput()");
         form.appendChild(label);
         form.appendChild(textarea);
         form.appendChild(input);
@@ -281,7 +417,7 @@ function Screen(kirje)
                              //console.log(tallennus);
                              console.log(obj);*/
 
-                            
+
                             if (document.getElementById("iframe").className == "lataaIframe_hidden") {
                                 document.getElementById("iframe").className = "lataaIframe_visible";
                             }
@@ -347,6 +483,8 @@ function Screen(kirje)
             var option = document.createElement("option");
             option.value = booksArray[i];
             option.appendChild(document.createTextNode(booksArray[i]));
+            if (i == 5)
+                option.setAttribute("selected", "selected");
             selectBook.appendChild(option);
         }
 
@@ -398,7 +536,7 @@ function ScreenSolu()
         divSolu.appendChild(span);
         smInput = document.createElement("input"); //sm-input
         smInput.className = "solu-sijamuoto-input";
-        smInput.value = "";
+        smInput.value = sanaOliot[jaeNro][sananPaikka].getInput();
         smInput.id = "sijamuoto" + jaeNro + "-" + sananPaikka;          //ID
         smInput.type = "text";
         smInput.name = "sijamuoto" + jaeNro + "-" + sananPaikka;
@@ -431,10 +569,11 @@ function ScreenSolu()
         suomInput.name = "suomennos" + jaeNro + "-" + sananPaikka;
         suomInput.maxlength = "20";
         suomInput.size = "20";
-        suomInput.value = "";
+        suomInput.value = sanaOliot[jaeNro][sananPaikka].getSuomennus();
         suomInput.title = "";
         suomInput.tabIndex = s_tabIndex;
         divSolu.appendChild(suomInput);
+        tapahtuma.asetaKuuntelija(suomInput);
         tabIndex++;
     }
 }
@@ -449,27 +588,31 @@ function ScreenSolu()
  * 
  * @returns {Sana}
  */
-function Sana(grkWord, sm, color, sijainti)
+function Sana(grkWord, sm, color, sijainti, input, suom)
 {
     var greekWord = grkWord; //luo yksityisen muuttujan, joka saatavilla vain oliolle. TODO: muuta kaikki     
     var sijamuoto = sm;
-    var userInput = "tyhja";  //käyttäjän syöttämä input, joka tallennetaan
+    var userInput = input;  //käyttäjän syöttämä input, joka tallennetaan
     var bgColor = color;
     var paikka = sijainti;
+    var suomennus = suom;
     this.getGreekWord = getGreekWord;
     this.getSijamuoto = getSijamuoto;
     this.getPaikka = getPaikka;
     this.getInput = getInput;
+    this.getSuomennus = getSuomennus;
     this.getBgColor = getBgColor;
     this.setColor = setColor;
     this.setInput = setInput;
+    this.setGreekWord = setGreekWord;
+    this.setSuomennus = setSuomennus;
     this.toJSON = toJSON;
 
     var jae = paikka.split("-"); // {1, 0}
 
     /* Tällä ylikirjoitetaan se, mitä Stringify oletuksena palauttaa */
     function toJSON() {
-        return '{"greekWord":"' + greekWord + '","sijamuoto":"' + sijamuoto + '","userInput":"' + userInput + '","bgColor":"' + bgColor + '","paikka":"' + paikka + '"},';
+        return '{"greekWord":"' + greekWord + '","sijamuoto":"' + sijamuoto + '","userInput":"' + userInput + '","bgColor":"' + bgColor + '","suomennus":"' + suomennus + '","paikka":"' + paikka + '"},';
     }
     /* 
      * Funktion tehtävänä palauttaa olion kreikkalainen "nimi"
@@ -512,6 +655,11 @@ function Sana(grkWord, sm, color, sijainti)
         return userInput;
     }
 
+    function getSuomennus()
+    {
+        return suomennus;
+    }
+
     /*
      * Funktion tehtävänä on asettaa parametrina tuleva uusi väri taustaväriksi. 
      * @param {type} newColor - uusi taustaväri
@@ -526,6 +674,17 @@ function Sana(grkWord, sm, color, sijainti)
     {
         userInput = input;
     }
+    
+    function setSuomennus(newSuom) {
+        suomennus = newSuom;
+    }
+
+    function setGreekWord(newGrWord)
+    {
+        greekWord = newGrWord;
+    }
+
+
 }
 
 /* Maalaa-olio, joka laittaa päälle maalaustyökalun ja huolehtii varsinaisesta

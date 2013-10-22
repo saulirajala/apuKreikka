@@ -10,7 +10,7 @@
             <title>apuKreikka 2.0</title>
     </head>
     <body>
-        <h1>Uusi ja uljas apuKreikka 2.0. Tällä kertaa olioilla. </h2>
+        
             <?php
             // put your code here
             ?>
