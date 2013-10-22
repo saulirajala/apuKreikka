@@ -188,7 +188,55 @@ body{
     width: 90%;
 }
 
-
 .lataaIframe_hidden {
     display: none;
+}
+
+.lataaUusi {
+    height: 100px;
+    width: 150px;
+    position: absolute;
+    top: 80px;
+    left: 100px;
+    border: 2px solid #000000;
+    border-radius: 10px;
+    -moz-box-shadow: 10px 10px 5px #888;
+    -webkit-box-shadow: 10px 10px 5px #888;
+    box-shadow: 10px 10px 5px #888;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: Verdana;
+    text-shadow: 5px 5px 5px #888;
+}
+
+.lataaUusi:hover {
+    -moz-box-shadow: 10px 10px 5px #888;
+    -webkit-box-shadow: 10px 10px 5px #888;
+    box-shadow: 5px 5px 5px #888;
+    cursor:pointer;
+}
+
+.lataaVanha {
+    position: absolute;
+    top: 80px;
+    left: 350px;
+    height: 100px;
+    width: 150px;
+    border: 2px solid #000000;
+    border-radius: 10px;
+    -moz-box-shadow: 10px 10px 5px #888;
+    -webkit-box-shadow: 10px 10px 5px #888;
+    box-shadow: 10px 10px 5px #888;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: Verdana;
+    text-shadow: 5px 5px 5px #888;
+    
+}
+
+.lataaVanha:hover {
+    -moz-box-shadow: 10px 10px 5px #888;
+    -webkit-box-shadow: 10px 10px 5px #888;
+    box-shadow: 5px 5px 5px #888;
+    cursor:pointer;
 }

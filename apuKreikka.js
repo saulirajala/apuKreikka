@@ -36,14 +36,14 @@ function Portti() {
 
     this.lataaVanha = lataaVanha; //ladataan sanat, yms. käyttäjän syötteestä
     this.lataaUusi = lataaUusi; //ladataan sanat, yms. "tietokannasta"
-    this.makeSanaOliot = makeSanaOliot;
-    this.lataaInput = lataaInput;
+    this.makeSanaOliotTyhjasta = makeSanaOliotTyhjasta;
+    this.makeSanaOliotInputista = makeSanaOliotInputista;
 
     /*
      * 
      * @returns {undefined}
      */
-    function makeSanaOliot() {
+    function makeSanaOliotTyhjasta() {
         naytto.tulostaOtsikko();
         for (var j = 1; j < greekWords.length; j++) {
             sanaOliot[j] = new Array();
@@ -77,7 +77,7 @@ function Portti() {
         sijamuodot[2] = new Array("R-ASN", "V-ADI-3S", "PREP", "T-GPM", "N-GPM", "P-GSM", "PREP", "N-DPF", "A-DPF");
         sijamuodot[3] = new Array("PREP", "T-GSM", "N-GSM", "P-GSM", "T-GSM", "V-2ADP-GSM", "PREP", "N-GSN", "N-PRI", "PREP", "N-ASF");
 
-        makeSanaOliot();
+        makeSanaOliotTyhjasta();
     }
 
 
@@ -95,7 +95,7 @@ function Portti() {
      * @param {type} arvo
      * @returns {undefined}
      */
-    function lataaInput() {
+    function makeSanaOliotInputista() {
         naytto.tulostaOtsikko();
         var JSON_teksti = document.getElementById("tekstiAlue").value;
         //parsetetaan JSON_teksti siten, että vain yksi olio kerrallaan
@@ -246,14 +246,14 @@ function Screen(kirje)
         input.type = "button";
         input.value = "Uusi";
         input.id = "lataaUusi";
-        input.setAttribute("style", "position: absolute; top: 100px; left: 0;")
+        input.className = "lataaUusi";
         input.setAttribute("onClick", "portti.lataaUusi()");
 
         var input2 = document.createElement("input");
         input2.type = "button";
         input2.value = "Lataa vanha";
         input2.id = "lataaVanha";
-        input2.setAttribute("style", "position: absolute; top: 100px; left: 100px;")
+        input2.className = "lataaVanha";
         input2.setAttribute("onClick", "portti.lataaVanha()");
         document.body.appendChild(input);
         document.body.appendChild(input2);
@@ -278,7 +278,7 @@ function Screen(kirje)
         var textarea = document.createElement("textarea");
         textarea.name = "tekstiAlue";
         textarea.id = "tekstiAlue";
-        input.setAttribute("onClick", "portti.lataaInput()");
+        input.setAttribute("onClick", "portti.makeSanaOliotInputista()");
         form.appendChild(label);
         form.appendChild(textarea);
         form.appendChild(input);
